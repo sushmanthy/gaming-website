@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing Plans — AWS Gaming</title>
+  <meta name="description" content="Choose the perfect AWS Gaming plan. From casual to hardcore, transparent pricing with no hidden fees." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+  <style>
+    /* TOGGLE */
+    .billing-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+    .billing-toggle span {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+    .billing-toggle span.active { color: var(--text-primary); }
+    .toggle-switch {
+      width: 52px;
+      height: 28px;
+      background: var(--bg-card3);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .toggle-switch.on { background: var(--gradient-orange); border-color: transparent; }
+    .toggle-knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .toggle-switch.on .toggle-knob { transform: translateX(24px); }
+    .save-badge {
+      background: rgba(0,255,136,0.15);
+      border: 1px solid rgba(0,255,136,0.4);
+      color: #00ff88;
+      font-size: 0.75rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* PLANS */
+    .pricing-section { background: var(--bg-dark); }
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    .plan-card {
+      background: var(--gradient-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .plan-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+
+    .plan-card.popular {
+      border-color: var(--primary);
+      box-shadow: var(--glow-primary), 0 30px 60px rgba(0,0,0,0.3);
+      transform: scale(1.02);
+    }
+
+    .plan-card.popular::before { background: var(--gradient-orange); }
+    .plan-card.ultra::before { background: var(--gradient-purple); }
+    .plan-card.enterprise::before { background: var(--gradient-blue); }
+
+    .plan-card:hover {
+      transform: translateY(-8px);
+    }
+    .plan-card.popular:hover {
+      transform: scale(1.02) translateY(-8px);
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--gradient-orange);
+      color: white;
+      font-size: 0.7rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .plan-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .plan-name {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+
+    .plan-price {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .plan-price sup {
+      font-size: 1.2rem;
+      vertical-align: top;
+      margin-top: 0.6rem;
+      display: inline-block;
+    }
+
+    .plan-period {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .plan-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .plan-features {
+      list-style: none;
+      flex: 1;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .plan-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .plan-features li.included { color: var(--text-primary); }
+    .plan-features li.excluded { color: var(--text-muted); text-decoration: none; }
+
+    .plan-features li .check {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .plan-features li.included .check {
+      background: rgba(0,255,136,0.15);
+      border: 1px solid rgba(0,255,136,0.4);
+      color: #00ff88;
+    }
+    .plan-features li.excluded .check {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .plan-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0.9rem 1.5rem;
+      border-radius: 10px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .plan-btn.outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+    .plan-btn.outline:hover {
+      border-color: rgba(255,107,0,0.5);
+      background: rgba(255,107,0,0.08);
+    }
+    .plan-btn.filled {
+      background: var(--gradient-orange);
+      color: white;
+      box-shadow: var(--glow-primary);
+    }
+    .plan-btn.filled:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(255,107,0,0.6);
+    }
+    .plan-btn.purple-fill {
+      background: var(--gradient-purple);
+      color: white;
+      box-shadow: 0 0 30px rgba(139,92,246,0.4);
+    }
+    .plan-btn.blue-fill {
+      background: var(--gradient-blue);
+      color: white;
+      box-shadow: var(--glow-accent);
+    }
+
+    /* COMPARISON TABLE */
+    .comparison { background: var(--bg-card); padding: 5rem 2rem; }
+    .comparison-table-wrapper { overflow-x: auto; }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+    .comparison-table th, .comparison-table td {
+      padding: 1rem 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .comparison-table th {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      background: var(--bg-card3);
+    }
+    .comparison-table th:first-child { text-align: left; }
+    .comparison-table td:first-child {
+      text-align: left;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    .comparison-table th.highlight { color: var(--primary); background: rgba(255,107,0,0.08); }
+    .comparison-table td.highlight { background: rgba(255,107,0,0.04); }
+    .comparison-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .comparison-table .check-yes { color: #00ff88; font-size: 1rem; }
+    .comparison-table .check-no { color: var(--text-muted); font-size: 1rem; }
+    .comparison-table .value { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; color: var(--text-primary); }
+    .table-section-header td {
+      background: rgba(255,255,255,0.03);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      padding: 0.6rem 1.5rem;
+      text-align: left;
+    }
+
+    /* ADD-ONS */
+    .addons { background: var(--bg-dark); padding: 5rem 2rem; }
+    .addons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+    .addon-card {
+      background: var(--gradient-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: all 0.3s ease;
+    }
+    .addon-card:hover {
+      border-color: rgba(0,212,255,0.3);
+      transform: translateY(-4px);
+    }
+    .addon-icon {
+      font-size: 1.5rem;
+      width: 48px;
+      height: 48px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .addon-body h4 {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .addon-body p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+    .addon-price {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      color: var(--accent);
+      margin-top: 0.5rem;
+    }
+
+    /* FAQ */
+    .faq { background: var(--bg-card); padding: 5rem 2rem; }
+    .faq-grid { max-width: 800px; margin: 0 auto; }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+      transition: color 0.2s ease;
+    }
+    .faq-question:hover { color: var(--primary); }
+    .faq-question i {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    .faq-item.open .faq-question { color: var(--primary); }
+    .faq-item.open .faq-question i { transform: rotate(180deg); color: var(--primary); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+    .faq-item.open .faq-answer { max-height: 300px; padding-bottom: 1.5rem; }
+    .faq-answer p {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">⚡</div>
+    <div class="nav-logo-text">AWS <span>Gaming</span></div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="games.html">Games</a></li>
+    <li><a href="pricing.html" class="active">Pricing</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="pricing.html" class="nav-cta">Get Started</a></li>
+  </ul>
+  <div class="nav-hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-bg-img" style="background-image:url('https://sspark.genspark.ai/cfimages?u1=KPmK4ScVz4lj8BxiRl%2BxuqEn%2Fry0Lg3FvDCEeI0sDRuAqb8cJr3wfmIDYJmCi86c1S0FQ3ELoR%2BZZz6KQCGevkRPX7nuq3oZaBFMj%2BzbQUpmHbgHlaaLoE8dWXOqFZGaQZBBDfJJil2iYpnFTRMETe3hf51n4GZ%2B3vXkT7qkQ2Ow5x3RITYBdzCD4mWzNKniRn%2BgKBnCtj0VrEOTVxpn9JV31%2B8QMM%2Fqt860Pcwh&u2=%2BV1hPyN4x9ld8Qo2&width=2560')"></div>
+  <div class="page-hero-content">
+    <div class="page-hero-tag">💎 Transparent Pricing</div>
+    <h1>Simple, <span class="gradient-text">Powerful</span> Plans</h1>
+    <p>No hidden fees. No contracts. Start free, upgrade anytime, cancel whenever you want.</p>
+  </div>
+</div>
+
+<!-- PRICING SECTION -->
+<section class="pricing-section">
+  <div class="container">
+
+    <!-- BILLING TOGGLE -->
+    <div class="billing-toggle">
+      <span id="monthlyLabel" class="active">Monthly</span>
+      <div class="toggle-switch" id="billingToggle" onclick="toggleBilling()">
+        <div class="toggle-knob"></div>
+      </div>
+      <span id="annualLabel">Annual</span>
+      <span class="save-badge">Save 25%</span>
+    </div>
+
+    <!-- PLANS -->
+    <div class="plans-grid">
+
+      <!-- FREE -->
+      <div class="plan-card fade-in-up stagger-1">
+        <div class="plan-icon" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);">🎮</div>
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">
+          <sup>$</sup><span class="price-val" data-monthly="0" data-annual="0">0</span>
+        </div>
+        <div class="plan-period">Forever Free</div>
+        <p class="plan-desc">Perfect for trying out AWS Gaming. Limited but powerful — no credit card required.</p>
+        <ul class="plan-features">
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 25 Free-to-play games</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 1080p @ 60fps streaming</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 2 hours/day session limit</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 1 device at a time</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Community forums</li>
+          <li class="excluded"><div class="check"><i class="fa-solid fa-minus"></i></div> AAA game library</li>
+          <li class="excluded"><div class="check"><i class="fa-solid fa-minus"></i></div> 4K / HDR streaming</li>
+          <li class="excluded"><div class="check"><i class="fa-solid fa-minus"></i></div> Dedicated GPU server</li>
+          <li class="excluded"><div class="check"><i class="fa-solid fa-minus"></i></div> Priority support</li>
+        </ul>
+        <a href="contact.html" class="plan-btn outline">Get Started Free</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan-card popular fade-in-up stagger-2">
+        <span class="popular-badge">⭐ Most Popular</span>
+        <div class="plan-icon" style="background:rgba(255,107,0,0.15);border:1px solid rgba(255,107,0,0.4);">🚀</div>
+        <div class="plan-name" style="color:var(--primary);">Pro</div>
+        <div class="plan-price gradient-text">
+          <sup>$</sup><span class="price-val" data-monthly="19" data-annual="14">19</span>
+        </div>
+        <div class="plan-period"><span class="period-label">per month</span> · billed monthly</div>
+        <p class="plan-desc">The most popular choice for serious gamers. Full library, 4K streaming, and unlimited play.</p>
+        <ul class="plan-features">
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 500+ AAA games library</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 4K HDR @ 60fps streaming</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Unlimited session time</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 2 simultaneous devices</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Cross-save across platforms</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 12ms average latency</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Priority matchmaking</li>
+          <li class="excluded"><div class="check"><i class="fa-solid fa-minus"></i></div> Dedicated RTX 4090 GPU</li>
+          <li class="excluded"><div class="check"><i class="fa-solid fa-minus"></i></div> 8K / 120fps streaming</li>
+        </ul>
+        <a href="contact.html" class="plan-btn filled"><i class="fa-solid fa-bolt"></i> Start 7-Day Free Trial</a>
+      </div>
+
+      <!-- ULTRA -->
+      <div class="plan-card ultra fade-in-up stagger-3">
+        <div class="plan-icon" style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.4);">⚡</div>
+        <div class="plan-name" style="color:var(--purple);">Ultra</div>
+        <div class="plan-price" style="background:var(--gradient-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+          <sup>$</sup><span class="price-val" data-monthly="39" data-annual="29">39</span>
+        </div>
+        <div class="plan-period"><span class="period-label">per month</span> · billed monthly</div>
+        <p class="plan-desc">For competitive gamers and streamers who demand the absolute best performance.</p>
+        <ul class="plan-features">
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Everything in Pro</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 4K HDR @ 120fps streaming</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Dedicated NVIDIA RTX 4090</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 4 simultaneous devices</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 8ms ultra-low latency</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Ray tracing + DLSS 3</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Stream tools + overlays</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Exclusive beta access</li>
+          <li class="excluded"><div class="check"><i class="fa-solid fa-minus"></i></div> 8K streaming</li>
+        </ul>
+        <a href="contact.html" class="plan-btn purple-fill"><i class="fa-solid fa-rocket"></i> Upgrade to Ultra</a>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="plan-card enterprise fade-in-up stagger-4">
+        <div class="plan-icon" style="background:rgba(0,212,255,0.15);border:1px solid rgba(0,212,255,0.4);">🏢</div>
+        <div class="plan-name" style="color:var(--accent);">Enterprise</div>
+        <div class="plan-price gradient-text-blue">
+          Custom
+        </div>
+        <div class="plan-period">Contact us for pricing</div>
+        <p class="plan-desc">For esports organizations, gaming cafes, and enterprises needing custom solutions at scale.</p>
+        <ul class="plan-features">
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Everything in Ultra</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 8K streaming @ 120fps</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Unlimited devices</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Dedicated AWS region</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Custom SLA & contracts</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> White-label branding</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> Dedicated account manager</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> API access & integrations</li>
+          <li class="included"><div class="check"><i class="fa-solid fa-check"></i></div> 24/7 premium support</li>
+        </ul>
+        <a href="contact.html" class="plan-btn blue-fill"><i class="fa-solid fa-envelope"></i> Contact Sales</a>
+      </div>
+
+    </div>
+
+    <!-- GUARANTEE -->
+    <div style="text-align:center;margin-top:3rem;padding:2rem;background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.2);border-radius:16px;">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">🛡️</div>
+      <h3 style="font-family:'Rajdhani',sans-serif;font-size:1.2rem;margin-bottom:0.5rem;">30-Day Money-Back Guarantee</h3>
+      <p style="color:var(--text-secondary);font-size:0.9rem;max-width:500px;margin:0 auto;">Not satisfied? We'll refund your full payment within 30 days, no questions asked. We're that confident in our platform.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="comparison">
+  <div class="container">
+    <h2 class="section-title fade-in-up">Full Feature <span class="gradient-text">Comparison</span></h2>
+    <p class="section-subtitle fade-in-up stagger-1">See exactly what's included in each plan.</p>
+    <div class="comparison-table-wrapper fade-in-up stagger-2">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Starter</th>
+            <th class="highlight">Pro ⭐</th>
+            <th>Ultra</th>
+            <th>Enterprise</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-section-header"><td colspan="5">Streaming Quality</td></tr>
+          <tr>
+            <td>Max Resolution</td>
+            <td class="value">1080p</td>
+            <td class="highlight value">4K HDR</td>
+            <td class="value">4K HDR</td>
+            <td class="value">8K HDR</td>
+          </tr>
+          <tr>
+            <td>Max Frame Rate</td>
+            <td class="value">60fps</td>
+            <td class="highlight value">60fps</td>
+            <td class="value">120fps</td>
+            <td class="value">120fps</td>
+          </tr>
+          <tr>
+            <td>Ray Tracing</td>
+            <td><span class="check-no">✗</span></td>
+            <td class="highlight"><span class="check-no">✗</span></td>
+            <td><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>DLSS 3 / AI Upscale</td>
+            <td><span class="check-no">✗</span></td>
+            <td class="highlight"><span class="check-no">✗</span></td>
+            <td><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+          <tr class="table-section-header"><td colspan="5">Game Library & Access</td></tr>
+          <tr>
+            <td>Game Library Size</td>
+            <td class="value">25 F2P</td>
+            <td class="highlight value">500+ AAA</td>
+            <td class="value">500+ AAA</td>
+            <td class="value">500+ AAA</td>
+          </tr>
+          <tr>
+            <td>New Games (Weekly)</td>
+            <td><span class="check-no">✗</span></td>
+            <td class="highlight"><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Beta Access</td>
+            <td><span class="check-no">✗</span></td>
+            <td class="highlight"><span class="check-no">✗</span></td>
+            <td><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+          <tr class="table-section-header"><td colspan="5">Performance & Hardware</td></tr>
+          <tr>
+            <td>GPU Type</td>
+            <td class="value">Shared</td>
+            <td class="highlight value">Shared RTX</td>
+            <td class="value">RTX 4090</td>
+            <td class="value">RTX 4090+</td>
+          </tr>
+          <tr>
+            <td>Avg. Latency</td>
+            <td class="value">~30ms</td>
+            <td class="highlight value">~12ms</td>
+            <td class="value">~8ms</td>
+            <td class="value">~5ms</td>
+          </tr>
+          <tr>
+            <td>Simultaneous Devices</td>
+            <td class="value">1</td>
+            <td class="highlight value">2</td>
+            <td class="value">4</td>
+            <td class="value">Unlimited</td>
+          </tr>
+          <tr class="table-section-header"><td colspan="5">Support & Extras</td></tr>
+          <tr>
+            <td>Support Type</td>
+            <td class="value">Community</td>
+            <td class="highlight value">Email + Chat</td>
+            <td class="value">Priority 24/7</td>
+            <td class="value">Dedicated</td>
+          </tr>
+          <tr>
+            <td>API Access</td>
+            <td><span class="check-no">✗</span></td>
+            <td class="highlight"><span class="check-no">✗</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>White-label</td>
+            <td><span class="check-no">✗</span></td>
+            <td class="highlight"><span class="check-no">✗</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ADD-ONS -->
+<section class="addons">
+  <div class="container">
+    <span class="tag" style="display:block;text-align:center;width:fit-content;margin:0 auto 1rem;">Extras</span>
+    <h2 class="section-title fade-in-up">Power-Up with <span class="gradient-text">Add-Ons</span></h2>
+    <p class="section-subtitle fade-in-up stagger-1">Enhance any plan with these optional extras.</p>
+    <div class="addons-grid">
+      <div class="addon-card fade-in-up stagger-1">
+        <div class="addon-icon">🎮</div>
+        <div class="addon-body">
+          <h4>Extra Game Slot</h4>
+          <p>Add a dedicated slot for one additional game to your monthly library picks.</p>
+          <div class="addon-price">+$4.99/month</div>
+        </div>
+      </div>
+      <div class="addon-card fade-in-up stagger-2">
+        <div class="addon-icon">📱</div>
+        <div class="addon-body">
+          <h4>Extra Device</h4>
+          <p>Stream on one additional device simultaneously on top of your plan limit.</p>
+          <div class="addon-price">+$5.99/month</div>
+        </div>
+      </div>
+      <div class="addon-card fade-in-up stagger-3">
+        <div class="addon-icon">🎙️</div>
+        <div class="addon-body">
+          <h4>Stream Pack</h4>
+          <p>Professional streaming tools, overlays, analytics, and low-latency stream output.</p>
+          <div class="addon-price">+$7.99/month</div>
+        </div>
+      </div>
+      <div class="addon-card fade-in-up stagger-4">
+        <div class="addon-icon">🏆</div>
+        <div class="addon-body">
+          <h4>Tournament Pass</h4>
+          <p>Access weekly tournaments with real cash prizes and exclusive in-game cosmetics.</p>
+          <div class="addon-price">+$9.99/month</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <h2 class="section-title fade-in-up">Frequently Asked <span class="gradient-text">Questions</span></h2>
+    <p class="section-subtitle fade-in-up stagger-1">Got questions? We've got answers.</p>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Do I need special hardware to use AWS Gaming?
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>No special hardware required! Any device with a modern web browser and a 15 Mbps internet connection is all you need. We recommend 25+ Mbps for 4K streaming. Everything is processed on our AWS servers — your local device just displays the stream.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Can I cancel my subscription anytime?
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Absolutely. You can cancel your subscription at any time with no cancellation fees. Your access will continue until the end of your current billing period, and we offer a 30-day money-back guarantee on paid plans.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          How does the 7-day free trial work?
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Sign up for any paid plan and get 7 days of full access completely free — no credit card charged until your trial ends. You'll receive a reminder 24 hours before your trial expires. If you cancel before it ends, you won't be charged anything.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Can I play games I already own on Steam or Xbox?
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Yes! AWS Gaming supports library integration with Steam, Epic Games Store, and Xbox Game Pass. Connect your accounts and your existing library becomes available for cloud streaming. You only need an AWS Gaming subscription for games in our exclusive catalog.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          What happens to my game saves if I switch plans?
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Your game saves, settings, and progress are always stored securely in the AWS cloud. They're tied to your account, not your plan. Upgrading, downgrading, or even temporarily cancelling will never affect your saved game data.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Is there a limit to how many hours I can play?
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>The Free Starter plan has a 2-hour daily session limit. All paid plans (Pro, Ultra, Enterprise) offer truly unlimited gaming — play as many hours as you want with no restrictions or throttling.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="fade-in-up">Still Have <span class="gradient-text">Questions?</span></h2>
+    <p class="fade-in-up stagger-1">Our team is ready to help you find the perfect plan for your gaming needs.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="fade-in-up stagger-2">
+      <a href="contact.html" class="btn-primary"><i class="fa-solid fa-headset"></i> Talk to Support</a>
+      <a href="games.html" class="btn-secondary"><i class="fa-solid fa-gamepad"></i> Explore Games</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo" style="display:inline-flex;">
+        <div class="nav-logo-icon">⚡</div>
+        <div class="nav-logo-text">AWS <span>Gaming</span></div>
+      </a>
+      <p>The world's most powerful cloud gaming platform, built on AWS infrastructure.</p>
+      <div class="footer-social">
+        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-twitch"></i></a>
+        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Plans</h4>
+      <ul>
+        <li><a href="#">Starter (Free)</a></li>
+        <li><a href="#">Pro — $19/mo</a></li>
+        <li><a href="#">Ultra — $39/mo</a></li>
+        <li><a href="#">Enterprise</a></li>
+        <li><a href="#">Add-Ons</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Refund Policy</a></li>
+        <li><a href="#">Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 AWS Gaming, Inc. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  let isAnnual = false;
+
+  function toggleBilling() {
+    isAnnual = !isAnnual;
+    const toggle = document.getElementById('billingToggle');
+    const monthlyLabel = document.getElementById('monthlyLabel');
+    const annualLabel = document.getElementById('annualLabel');
+
+    toggle.classList.toggle('on', isAnnual);
+    monthlyLabel.classList.toggle('active', !isAnnual);
+    annualLabel.classList.toggle('active', isAnnual);
+
+    document.querySelectorAll('.price-val').forEach(el => {
+      const val = isAnnual ? el.dataset.annual : el.dataset.monthly;
+      el.textContent = val;
+    });
+
+    document.querySelectorAll('.period-label').forEach(el => {
+      el.textContent = 'per month';
+    });
+
+    const periodEls = document.querySelectorAll('.plan-period');
+    periodEls.forEach(el => {
+      if (el.querySelector('.period-label')) {
+        el.innerHTML = el.innerHTML.replace(
+          isAnnual ? 'billed monthly' : 'billed annually',
+          isAnnual ? 'billed annually' : 'billed monthly'
+        );
+      }
+    });
+  }
+
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — AWS Gaming</title>
+  <meta name="description" content="Get in touch with the AWS Gaming team. We're here to help 24/7." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+  <style>
+    /* CONTACT LAYOUT */
+    .contact-section {
+      background: var(--bg-dark);
+      padding: 5rem 2rem;
+    }
+    .contact-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    /* LEFT SIDE */
+    .contact-info h2 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      margin-bottom: 1rem;
+    }
+    .contact-info > p {
+      color: var(--text-secondary);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .contact-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: var(--gradient-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    .contact-card:hover {
+      border-color: rgba(255,107,0,0.4);
+      transform: translateX(4px);
+    }
+    .contact-card-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .contact-card-icon.orange { background: rgba(255,107,0,0.15); border: 1px solid rgba(255,107,0,0.3); color: var(--primary); }
+    .contact-card-icon.blue { background: rgba(0,212,255,0.15); border: 1px solid rgba(0,212,255,0.3); color: var(--accent); }
+    .contact-card-icon.purple { background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); color: var(--purple); }
+    .contact-card-icon.green { background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; }
+
+    .contact-card-body h4 {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+    .contact-card-body p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .contact-card-body span {
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    /* SOCIAL LINKS */
+    .contact-socials h4 {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .social-links-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gradient-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.6rem 1rem;
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    .social-link i { font-size: 1rem; }
+    .social-link:hover { border-color: rgba(255,107,0,0.4); color: var(--primary); background: rgba(255,107,0,0.05); }
+    .social-link.discord:hover { border-color: rgba(88,101,242,0.5); color: #5865f2; }
+    .social-link.twitter:hover { border-color: rgba(29,161,242,0.5); color: #1da1f2; }
+    .social-link.twitch:hover { border-color: rgba(100,65,165,0.5); color: #6441a5; }
+
+    /* STATUS STRIP */
+    .status-strip {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(0,255,136,0.05);
+      border: 1px solid rgba(0,255,136,0.2);
+      border-radius: 12px;
+      padding: 0.875rem 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: #00ff88;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      flex-shrink: 0;
+    }
+    .status-strip p {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #00ff88;
+    }
+    .status-strip span { color: var(--text-secondary); font-weight: 400; }
+
+    /* RIGHT SIDE - FORM */
+    .contact-form-wrapper {
+      background: var(--gradient-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem;
+    }
+    .contact-form-header {
+      margin-bottom: 2rem;
+    }
+    .contact-form-header h3 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .contact-form-header p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .form-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      background: var(--bg-card3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+    }
+    .form-tab {
+      flex: 1;
+      padding: 0.6rem;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .form-tab.active {
+      background: var(--gradient-orange);
+      color: white;
+      box-shadow: var(--glow-primary);
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-group label {
+      display: block;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    .form-group label span { color: var(--primary); }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: var(--bg-card3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255,107,0,0.1);
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+    .form-select option { background: var(--bg-card); }
+    .form-textarea { resize: vertical; min-height: 130px; }
+
+    .form-checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .form-checkbox {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .form-checkbox-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .form-checkbox-label a { color: var(--primary); text-decoration: none; }
+
+    .form-submit {
+      width: 100%;
+      padding: 1rem;
+      background: var(--gradient-orange);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      box-shadow: var(--glow-primary);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1.5rem;
+    }
+    .form-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(255,107,0,0.6);
+    }
+    .form-submit:active { transform: translateY(0); }
+
+    /* SUCCESS STATE */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+    .form-success.show { display: block; }
+    .form-success .success-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(0,255,136,0.15);
+      border: 2px solid rgba(0,255,136,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1.5rem;
+    }
+    .form-success h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: #00ff88; }
+    .form-success p { color: var(--text-secondary); }
+
+    /* MAP SECTION */
+    .offices-section {
+      background: var(--bg-card);
+      padding: 5rem 2rem;
+    }
+    .offices-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .office-card {
+      background: var(--bg-card3);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    .office-card:hover {
+      border-color: rgba(0,212,255,0.3);
+      transform: translateY(-4px);
+    }
+    .office-flag { font-size: 2.5rem; margin-bottom: 1rem; }
+    .office-card h4 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .office-card p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+    .office-card .office-tag {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* RESPONSE TIMES */
+    .response-times {
+      background: var(--bg-dark);
+      padding: 4rem 2rem;
+    }
+    .response-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+    }
+    .response-card {
+      background: var(--gradient-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .response-card .icon { font-size: 1.8rem; margin-bottom: 0.75rem; }
+    .response-card h4 { font-family: 'Rajdhani', sans-serif; font-weight: 700; margin-bottom: 0.3rem; }
+    .response-card .time { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--primary); margin-bottom: 0.3rem; }
+    .response-card p { font-size: 0.8rem; color: var(--text-muted); }
+
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">⚡</div>
+    <div class="nav-logo-text">AWS <span>Gaming</span></div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="games.html">Games</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+    <li><a href="pricing.html" class="nav-cta">Get Started</a></li>
+  </ul>
+  <div class="nav-hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-bg-img" style="background-image:url('https://sspark.genspark.ai/cfimages?u1=Y0hUiYpmtK9KyLc%2BIHKMZp0l5CAhsm%2B%2BXOQFu7%2F0FxECZf4y41j3sNC7IfsEn%2FkSsvqGzeZ9xCWACUmXEe2qWokElqxWgo%2Br4CKN4pmg7pFdgLprBuo6UEhsZrN9wbdNsZq4Bf3i5AQigDLV75WmrMuvGwzNJ0gYU66c0bfaMnxB9VLDlMpNIUVqyzcjmU0AmEHizl9gnzATKTxnHLB%2BIO2r%2B0hCCqm24xQqkw%3D%3D&u2=OyBH0u3gdGD6Vxti&width=2560')"></div>
+  <div class="page-hero-content">
+    <div class="page-hero-tag">💬 Get in Touch</div>
+    <h1>We're Here to <span class="gradient-text">Help</span></h1>
+    <p>Our team of gaming experts is available 24/7. Reach out via any channel — we typically respond within minutes.</p>
+  </div>
+</div>
+
+<!-- CONTACT SECTION -->
+<section class="contact-section">
+  <div class="contact-grid">
+
+    <!-- LEFT: INFO -->
+    <div class="contact-info">
+      <div class="status-strip">
+        <div class="status-dot"></div>
+        <p>All systems operational <span>— Last checked 2 minutes ago</span></p>
+      </div>
+
+      <h2>Get in <span class="gradient-text">Touch</span></h2>
+      <p>Whether you need help with your account, have a billing question, or want to explore enterprise solutions — we've got you covered.</p>
+
+      <div class="contact-cards">
+        <a href="mailto:support@awsgaming.gg" class="contact-card">
+          <div class="contact-card-icon orange"><i class="fa-solid fa-envelope"></i></div>
+          <div class="contact-card-body">
+            <h4>Email Support</h4>
+            <p>For general inquiries and account help</p>
+            <span>support@awsgaming.gg</span>
+          </div>
+        </a>
+        <a href="#" class="contact-card">
+          <div class="contact-card-icon blue"><i class="fa-solid fa-comment-dots"></i></div>
+          <div class="contact-card-body">
+            <h4>Live Chat</h4>
+            <p>Chat with our team in real-time — no wait</p>
+            <span>Available 24/7 · Avg. response: 2 min</span>
+          </div>
+        </a>
+        <a href="#" class="contact-card">
+          <div class="contact-card-icon purple"><i class="fa-brands fa-discord"></i></div>
+          <div class="contact-card-body">
+            <h4>Discord Community</h4>
+            <p>Join 500K+ gamers on our official Discord</p>
+            <span>discord.gg/awsgaming</span>
+          </div>
+        </a>
+        <a href="tel:+18005559999" class="contact-card">
+          <div class="contact-card-icon green"><i class="fa-solid fa-phone"></i></div>
+          <div class="contact-card-body">
+            <h4>Phone Support</h4>
+            <p>Enterprise & Pro users — priority line</p>
+            <span>+1 (800) 555-9999</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="contact-socials">
+        <h4>Follow Us</h4>
+        <div class="social-links-row">
+          <a href="#" class="social-link twitter"><i class="fa-brands fa-x-twitter"></i> Twitter</a>
+          <a href="#" class="social-link discord"><i class="fa-brands fa-discord"></i> Discord</a>
+          <a href="#" class="social-link"><i class="fa-brands fa-twitch"></i> Twitch</a>
+          <a href="#" class="social-link"><i class="fa-brands fa-youtube"></i> YouTube</a>
+          <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: FORM -->
+    <div class="contact-form-wrapper fade-in-up">
+      <div class="contact-form-header">
+        <h3>Send Us a <span class="gradient-text">Message</span></h3>
+        <p>Fill out the form below and we'll get back to you as soon as possible.</p>
+      </div>
+
+      <!-- FORM TABS -->
+      <div class="form-tabs">
+        <button class="form-tab active" onclick="setTab(this, 'general')">General</button>
+        <button class="form-tab" onclick="setTab(this, 'billing')">Billing</button>
+        <button class="form-tab" onclick="setTab(this, 'technical')">Technical</button>
+        <button class="form-tab" onclick="setTab(this, 'enterprise')">Enterprise</button>
+      </div>
+
+      <!-- FORM -->
+      <form id="contactForm" onsubmit="submitForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name <span>*</span></label>
+            <input type="text" class="form-input" placeholder="John" required />
+          </div>
+          <div class="form-group">
+            <label>Last Name <span>*</span></label>
+            <input type="text" class="form-input" placeholder="Doe" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address <span>*</span></label>
+          <input type="email" class="form-input" placeholder="john@example.com" required />
+        </div>
+        <div class="form-group" id="subjectGroup">
+          <label>Subject <span>*</span></label>
+          <select class="form-select" id="subjectSelect" required>
+            <option value="">— Select a topic —</option>
+            <option>Account & Access</option>
+            <option>Billing & Payments</option>
+            <option>Game Library</option>
+            <option>Technical Issue</option>
+            <option>Enterprise Inquiry</option>
+            <option>Partnership Opportunity</option>
+            <option>Press & Media</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group" id="planGroup" style="display:none;">
+          <label>Current Plan</label>
+          <select class="form-select">
+            <option value="">— Select your plan —</option>
+            <option>Starter (Free)</option>
+            <option>Pro</option>
+            <option>Ultra</option>
+            <option>Enterprise</option>
+          </select>
+        </div>
+        <div class="form-group" id="companyGroup" style="display:none;">
+          <label>Company / Organization</label>
+          <input type="text" class="form-input" placeholder="Your company name" />
+        </div>
+        <div class="form-group">
+          <label>Message <span>*</span></label>
+          <textarea class="form-textarea" placeholder="Describe your issue or question in detail..." required></textarea>
+        </div>
+        <div class="form-group">
+          <div class="form-checkbox-group">
+            <input type="checkbox" class="form-checkbox" id="gdprCheck" required />
+            <label class="form-checkbox-label" for="gdprCheck">
+              I agree to the <a href="#">Privacy Policy</a> and consent to AWS Gaming contacting me regarding my inquiry.
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-checkbox-group">
+            <input type="checkbox" class="form-checkbox" id="newsCheck" />
+            <label class="form-checkbox-label" for="newsCheck">
+              Send me news about AWS Gaming updates, new game releases, and promotions.
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="form-submit">
+          <i class="fa-solid fa-paper-plane"></i> Send Message
+        </button>
+      </form>
+
+      <!-- SUCCESS MESSAGE -->
+      <div class="form-success" id="formSuccess">
+        <div class="success-icon">✅</div>
+        <h3>Message Sent!</h3>
+        <p>Thanks for reaching out. Our team will respond to <strong id="successEmail"></strong> within 2 hours (usually much faster!).</p>
+        <br>
+        <a href="index.html" class="btn-primary" style="display:inline-flex;margin-top:0.5rem;">
+          <i class="fa-solid fa-house"></i> Back to Home
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RESPONSE TIMES -->
+<section class="response-times">
+  <div class="container">
+    <h2 class="section-title fade-in-up">Our <span class="gradient-text">Response Times</span></h2>
+    <p class="section-subtitle fade-in-up stagger-1">We take support seriously. Here's what to expect.</p>
+    <div class="response-grid">
+      <div class="response-card fade-in-up stagger-1">
+        <div class="icon">💬</div>
+        <h4>Live Chat</h4>
+        <div class="time">&lt; 2 min</div>
+        <p>Avg. first response time</p>
+      </div>
+      <div class="response-card fade-in-up stagger-2">
+        <div class="icon">📧</div>
+        <h4>Email</h4>
+        <div class="time">&lt; 2 hrs</div>
+        <p>Business & evening hours</p>
+      </div>
+      <div class="response-card fade-in-up stagger-3">
+        <div class="icon">🎮</div>
+        <h4>Discord</h4>
+        <div class="time">&lt; 30 min</div>
+        <p>Community & mod response</p>
+      </div>
+      <div class="response-card fade-in-up stagger-4">
+        <div class="icon">📞</div>
+        <h4>Phone (Pro+)</h4>
+        <div class="time">Immediate</div>
+        <p>Direct line for subscribers</p>
+      </div>
+      <div class="response-card fade-in-up stagger-5">
+        <div class="icon">🏢</div>
+        <h4>Enterprise</h4>
+        <div class="time">Dedicated</div>
+        <p>Your own account manager</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICES -->
+<section class="offices-section">
+  <div class="container">
+    <h2 class="section-title fade-in-up">Global <span class="gradient-text">Offices</span></h2>
+    <p class="section-subtitle fade-in-up stagger-1">Serving gamers from data centers and offices around the world.</p>
+    <div class="offices-grid">
+      <div class="office-card fade-in-up stagger-1">
+        <div class="office-flag">🇺🇸</div>
+        <h4>San Francisco, USA</h4>
+        <p>548 Market Street, Suite 9100<br>San Francisco, CA 94104</p>
+        <span class="office-tag">🏠 HQ</span>
+      </div>
+      <div class="office-card fade-in-up stagger-2">
+        <div class="office-flag">🇬🇧</div>
+        <h4>London, UK</h4>
+        <p>1 Canada Square, Canary Wharf<br>London, E14 5DY</p>
+        <span class="office-tag">🌍 EMEA HQ</span>
+      </div>
+      <div class="office-card fade-in-up stagger-3">
+        <div class="office-flag">🇸🇬</div>
+        <h4>Singapore</h4>
+        <p>1 Raffles Quay, North Tower<br>Singapore 048583</p>
+        <span class="office-tag">🌏 APAC HQ</span>
+      </div>
+      <div class="office-card fade-in-up stagger-4">
+        <div class="office-flag">🇩🇪</div>
+        <h4>Frankfurt, Germany</h4>
+        <p>Hauptwache 7<br>60313 Frankfurt am Main</p>
+        <span class="office-tag">⚡ Data Center</span>
+      </div>
+      <div class="office-card fade-in-up stagger-5">
+        <div class="office-flag">🇯🇵</div>
+        <h4>Tokyo, Japan</h4>
+        <p>Shibuya Stream, 3-21-3 Shibuya<br>Tokyo 150-0002</p>
+        <span class="office-tag">⚡ Data Center</span>
+      </div>
+      <div class="office-card fade-in-up stagger-6">
+        <div class="office-flag">🇧🇷</div>
+        <h4>São Paulo, Brazil</h4>
+        <p>Av. Brigadeiro Faria Lima, 3477<br>Itaim Bibi, SP 04538-133</p>
+        <span class="office-tag">🌎 LATAM HQ</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="fade-in-up">Ready to Start <span class="gradient-text">Gaming?</span></h2>
+    <p class="fade-in-up stagger-1">Join 2 million+ players on the world's best cloud gaming platform. First 7 days free.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="fade-in-up stagger-2">
+      <a href="pricing.html" class="btn-primary"><i class="fa-solid fa-rocket"></i> Start Free Trial</a>
+      <a href="games.html" class="btn-secondary"><i class="fa-solid fa-gamepad"></i> Browse Games</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo" style="display:inline-flex;">
+        <div class="nav-logo-icon">⚡</div>
+        <div class="nav-logo-text">AWS <span>Gaming</span></div>
+      </a>
+      <p>The world's most powerful cloud gaming platform, built on AWS infrastructure. Play any game, anywhere, on any device.</p>
+      <div class="footer-social">
+        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-twitch"></i></a>
+        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="games.html">Game Library</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="#">Tournaments</a></li>
+        <li><a href="#">Leaderboards</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">System Status</a></li>
+        <li><a href="#">Community</a></li>
+        <li><a href="#">Developers</a></li>
+        <li><a href="#">Partnerships</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 AWS Gaming, Inc. All rights reserved. AWS is a trademark of Amazon Web Services.</p>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Cookie Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  function setTab(btn, type) {
+    document.querySelectorAll('.form-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Show/hide contextual fields
+    const planGroup = document.getElementById('planGroup');
+    const companyGroup = document.getElementById('companyGroup');
+
+    planGroup.style.display = (type === 'billing' || type === 'technical') ? 'block' : 'none';
+    companyGroup.style.display = (type === 'enterprise') ? 'block' : 'none';
+
+    // Pre-select subject
+    const sel = document.getElementById('subjectSelect');
+    const map = {
+      billing: 'Billing & Payments',
+      technical: 'Technical Issue',
+      enterprise: 'Enterprise Inquiry',
+      general: ''
+    };
+    const target = map[type];
+    if (target) {
+      for (let opt of sel.options) {
+        if (opt.text === target) { opt.selected = true; break; }
+      }
+    } else {
+      sel.selectedIndex = 0;
+    }
+  }
+
+  function submitForm(e) {
+    e.preventDefault();
+    const emailInput = e.target.querySelector('input[type="email"]');
+    const email = emailInput ? emailInput.value : 'your email';
+
+    document.getElementById('successEmail').textContent = email;
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').classList.add('show');
+  }
+</script>
+</body>
+</html>

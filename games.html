@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Library — AWS Gaming</title>
+  <meta name="description" content="Browse 500+ AAA games available on AWS Gaming cloud platform. Filter by genre, rating, and more." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+  <style>
+    /* FILTER BAR */
+    .filter-section {
+      background: var(--bg-card);
+      padding: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .filter-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+      display: flex;
+      align-items: center;
+      background: var(--bg-card3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0 1rem;
+      gap: 10px;
+    }
+    .search-box i { color: var(--text-muted); }
+    .search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.75rem 0;
+      width: 100%;
+    }
+    .search-box input::placeholder { color: var(--text-muted); }
+    .filter-btn {
+      padding: 0.7rem 1.2rem;
+      background: var(--bg-card3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: rgba(255,107,0,0.08);
+    }
+    .filter-btn.active {
+      background: rgba(255,107,0,0.15);
+    }
+
+    /* GENRE TABS */
+    .genre-tabs {
+      background: var(--bg-card);
+      padding: 0 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .genre-tabs-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .genre-tabs-inner::-webkit-scrollbar { display: none; }
+    .genre-tab {
+      padding: 1rem 1.5rem;
+      border-bottom: 3px solid transparent;
+      color: var(--text-secondary);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      background: transparent;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .genre-tab:hover { color: var(--text-primary); }
+    .genre-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* GAMES MAIN */
+    .games-main {
+      padding: 3rem 2rem;
+    }
+    .games-main-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .games-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .games-section-header h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .games-count {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .games-sort {
+      padding: 0.6rem 1rem;
+      background: var(--bg-card3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      outline: none;
+    }
+    .games-sort option { background: var(--bg-card); }
+
+    /* FEATURED BANNER */
+    .featured-banner {
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 3rem;
+      min-height: 320px;
+      display: flex;
+      align-items: flex-end;
+    }
+    .featured-banner-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .featured-banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(5,8,16,0.95) 0%, rgba(5,8,16,0.6) 50%, transparent 100%);
+    }
+    .featured-banner-content {
+      position: relative;
+      z-index: 1;
+      padding: 2.5rem;
+      max-width: 600px;
+    }
+    .featured-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,107,0,0.2);
+      border: 1px solid rgba(255,107,0,0.5);
+      border-radius: 50px;
+      padding: 5px 14px;
+      font-size: 0.75rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+    }
+    .featured-banner-content h2 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      margin-bottom: 0.75rem;
+    }
+    .featured-banner-content p {
+      color: var(--text-secondary);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    .featured-meta {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .featured-meta span {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .featured-meta span i { color: var(--primary); }
+
+    /* GAME CARD FULL */
+    .games-full-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    /* HORIZONTAL GAME CARD */
+    .game-card-h {
+      display: flex;
+      gap: 1rem;
+      background: var(--gradient-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    .game-card-h:hover {
+      border-color: rgba(255,107,0,0.4);
+      transform: translateX(4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .game-card-h-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 10px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .game-card-h-body { flex: 1; min-width: 0; }
+    .game-card-h-body h4 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .game-card-h-body .genre { font-size: 0.75rem; color: var(--primary); font-weight: 600; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
+    .game-card-h-body .rating { font-size: 0.8rem; color: #ffd700; margin-top: 0.4rem; }
+    .game-card-h-play {
+      width: 38px;
+      height: 38px;
+      background: var(--gradient-orange);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: white;
+      flex-shrink: 0;
+      align-self: center;
+    }
+
+    /* GENRE SECTION */
+    .genre-section { margin-bottom: 3rem; }
+    .genre-section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .genre-section-header h3 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    .genre-section-header a {
+      color: var(--primary);
+      font-size: 0.85rem;
+      text-decoration: none;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    /* MODAL */
+    .game-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .game-modal.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .game-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+    }
+    .game-modal-box {
+      position: relative;
+      z-index: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      max-width: 600px;
+      width: 100%;
+      overflow: hidden;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+    .game-modal.open .game-modal-box {
+      transform: scale(1);
+    }
+    .game-modal-img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+    .game-modal-body { padding: 2rem; }
+    .game-modal-body h2 { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .game-modal-body p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem; }
+    .game-modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 36px;
+      height: 36px;
+      background: rgba(0,0,0,0.7);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-primary);
+      font-size: 1rem;
+      z-index: 10;
+    }
+
+    /* NEW RELEASES STRIP */
+    .new-releases {
+      background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(0,212,255,0.05));
+      border-top: 1px solid rgba(139,92,246,0.2);
+      border-bottom: 1px solid rgba(139,92,246,0.2);
+      padding: 3rem 2rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">⚡</div>
+    <div class="nav-logo-text">AWS <span>Gaming</span></div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="games.html" class="active">Games</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="pricing.html" class="nav-cta">Get Started</a></li>
+  </ul>
+  <div class="nav-hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-bg-img" style="background-image:url('https://sspark.genspark.ai/cfimages?u1=b5%2Bj1%2BluSI%2BPmwflpuXp7jIFMumRhJ5NRETLoRtdkL58PL%2BxMTRtaCF475SHe7j9araxlRODfg97Q3jZGwkayJsIctIB2t%2Bc1tRA8W4xQJ3W9kfpmqaraSVenvO9YrjfVj%2BrTGaGF3beMB7ssmPPRkh5QW%2FExgEXajMyw73GUkHSA%2BksmKiuPaxudr0sSo0vbxHqnNwNChNC%2B5zoaElzE9FwQ%2BlWydlqSjYgZVYVPjPyHJxhX8Se3j%2FpzeerRQxq&u2=U0KZBA5chJffVb7G&width=2560')"></div>
+  <div class="page-hero-content">
+    <div class="page-hero-tag">🎮 Game Library</div>
+    <h1>500+ <span class="gradient-text">Epic</span> Games</h1>
+    <p>Every genre, every platform. Stream instantly with no downloads required.</p>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-section">
+  <div class="filter-inner">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Search games..." id="gameSearch" />
+    </div>
+    <button class="filter-btn active" data-filter="all">All Games</button>
+    <button class="filter-btn" data-filter="new">New Releases</button>
+    <button class="filter-btn" data-filter="top">Top Rated</button>
+    <button class="filter-btn" data-filter="free">Free to Play</button>
+    <select class="filter-btn games-sort" id="sortGames">
+      <option value="">Sort: Popular</option>
+      <option value="rating">By Rating</option>
+      <option value="newest">Newest First</option>
+      <option value="az">A → Z</option>
+    </select>
+  </div>
+</div>
+
+<!-- GENRE TABS -->
+<div class="genre-tabs">
+  <div class="genre-tabs-inner" id="genreTabs">
+    <button class="genre-tab active" data-genre="all">All</button>
+    <button class="genre-tab" data-genre="rpg">RPG</button>
+    <button class="genre-tab" data-genre="fps">FPS</button>
+    <button class="genre-tab" data-genre="racing">Racing</button>
+    <button class="genre-tab" data-genre="horror">Horror</button>
+    <button class="genre-tab" data-genre="moba">MOBA</button>
+    <button class="genre-tab" data-genre="sports">Sports</button>
+    <button class="genre-tab" data-genre="strategy">Strategy</button>
+    <button class="genre-tab" data-genre="adventure">Adventure</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="games-main">
+  <div class="games-main-inner">
+
+    <!-- FEATURED BANNER -->
+    <div class="featured-banner fade-in-up">
+      <img class="featured-banner-img" src="https://sspark.genspark.ai/cfimages?u1=1idwCsByRr256PNw%2FundCTNZ6oDH%2BSAtPDDqWiA2juVtWo45x%2FbTaEMVjMqn2bXjqrObZ9C%2BQcb1KwF6GMl%2BoFMa%2FbEywC7VcYo5JhVwU3OrDrOwHDgdej08YtAAE5Xv2EyTIl4G4rgykjU%3D&u2=GmhcqiKu5%2FdF1UUD&width=2560" alt="Featured Game" />
+      <div class="featured-banner-overlay"></div>
+      <div class="featured-banner-content">
+        <div class="featured-badge">⭐ Game of the Month</div>
+        <h2>Whispers in the <span class="gradient-text">Fog</span></h2>
+        <p>A breathtaking first-person psychological horror experience that redefines atmospheric terror. Explore a haunted forest with no map and no escape.</p>
+        <div class="featured-meta">
+          <span><i class="fa-solid fa-star"></i> 4.9 / 5.0</span>
+          <span><i class="fa-solid fa-users"></i> 320K Players</span>
+          <span><i class="fa-solid fa-clock"></i> 40+ Hours</span>
+          <span><i class="fa-solid fa-tag"></i> Included in Pro+</span>
+        </div>
+        <a href="#" class="btn-primary" onclick="openModal('fog')">
+          <i class="fa-solid fa-play"></i> Play Now
+        </a>
+      </div>
+    </div>
+
+    <!-- TOP PICKS -->
+    <div class="genre-section">
+      <div class="games-section-header">
+        <h2>🔥 Top Picks <span style="color:var(--text-muted);font-size:0.9rem;font-weight:400;">— 500+ games total</span></h2>
+        <select class="games-sort">
+          <option>Sort: Popular</option>
+          <option>Rating</option>
+          <option>Newest</option>
+        </select>
+      </div>
+      <div class="games-full-grid" id="gamesGrid">
+
+        <!-- Card 1 -->
+        <div class="game-card fade-in-up stagger-1" onclick="openModal('shadow')">
+          <div class="game-card-img-wrapper">
+            <img class="game-card-img" src="https://sspark.genspark.ai/cfimages?u1=3IfjZJyUgZkQaIGPH0XwWCNzZV%2BKRkwlLye4ySKgHU4N54oBYn92f34oxzXrxzc2ufCp2P0Wp8blgPb7jYVrcWx1h2a76VHZ5GjTDfKK0tMp2U35dLDaWX%2FipwvLk54FHMLGHU0C9k5qvKaiYXheb1ny1J4%3D&u2=vnNrSvAlOnbS4LVd&width=2560" alt="Shadow Realm Chronicles" />
+            <span class="game-card-badge">🔥 Hot</span>
+          </div>
+          <div class="game-card-body">
+            <div class="game-card-genre">Action RPG</div>
+            <h3 class="game-card-title">Shadow Realm Chronicles</h3>
+            <p class="game-card-desc">An epic open-world RPG with thousands of hours of content and deep character systems.</p>
+            <div class="game-card-footer">
+              <div class="game-card-rating">★★★★★ <span style="color:var(--text-secondary);">4.9</span></div>
+              <div class="game-card-players">128K playing</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="game-card fade-in-up stagger-2" onclick="openModal('neon')">
+          <div class="game-card-img-wrapper">
+            <img class="game-card-img" src="https://sspark.genspark.ai/cfimages?u1=f%2FSyQrIsxZ6mrt4Zy7e%2Fmo75ahN3HsP0hj5K7xY1mymk0r2403S%2BrAh8%2FhgSy7%2FgxgovEBWCWE1i0%2BLU6QKfcNbyQglUKT7RTO9HLuZXfrhD%2F4Xf2%2FGQiedSsETxpYEaPRdHE7jfFtExZ7CjHRkg5hDPQDdBGZTT%2BA%3D%3D&u2=QONzvaUnvVbvz9%2FB&width=2560" alt="NeonStrike" />
+            <span class="game-card-badge" style="background:var(--gradient-blue);">New</span>
+          </div>
+          <div class="game-card-body">
+            <div class="game-card-genre">FPS / Tactical</div>
+            <h3 class="game-card-title">NeonStrike: Reborn</h3>
+            <p class="game-card-desc">Intense tactical FPS with 5v5 ranked matches, weekly events, and seasonal battle passes.</p>
+            <div class="game-card-footer">
+              <div class="game-card-rating">★★★★½ <span style="color:var(--text-secondary);">4.7</span></div>
+              <div class="game-card-players">245K playing</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="game-card fade-in-up stagger-3" onclick="openModal('hyperion')">
+          <div class="game-card-img-wrapper">
+            <img class="game-card-img" src="https://sspark.genspark.ai/cfimages?u1=mNLSymwOTe9TUVRAy1TJfkMKXl90nssJ8B34bTWTv7BO7D5oMs4ZRpQ%2FzIdJpf29aZFj8ndD0rU9XxKRZZ2nWGFMD58fFapkh44D9FB85FY5cYZJcQKxHOOeXjK4%2BydAYb%2Bbdp1DgUUc6wZYt9PrBAbixqPldQT1Can%2BsytuI1Vy6XwbhiyysT3xUrtVf%2BmShOt97nfOIGhkYmygktt99BaoyBdUCeE%3D&u2=6RtaEW6URcIrDGGp&width=2560" alt="Hyperion City Racer" />
+            <span class="game-card-badge" style="background:var(--gradient-purple);">Popular</span>
+          </div>
+          <div class="game-card-body">
+            <div class="game-card-genre">Open World Racing</div>
+            <h3 class="game-card-title">Hyperion City Racer</h3>
+            <p class="game-card-desc">Race through a neon-soaked cyberpunk city with 200+ cars and live multiplayer events.</p>
+            <div class="game-card-footer">
+              <div class="game-card-rating">★★★★★ <span style="color:var(--text-secondary);">4.8</span></div>
+              <div class="game-card-players">89K playing</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="game-card fade-in-up stagger-4" onclick="openModal('fog')">
+          <div class="game-card-img-wrapper">
+            <img class="game-card-img" src="https://sspark.genspark.ai/cfimages?u1=1idwCsByRr256PNw%2FundCTNZ6oDH%2BSAtPDDqWiA2juVtWo45x%2FbTaEMVjMqn2bXjqrObZ9C%2BQcb1KwF6GMl%2BoFMa%2FbEywC7VcYo5JhVwU3OrDrOwHDgdej08YtAAE5Xv2EyTIl4G4rgykjU%3D&u2=GmhcqiKu5%2FdF1UUD&width=2560" alt="Whispers in the Fog" />
+            <span class="game-card-badge">⭐ GOTY</span>
+          </div>
+          <div class="game-card-body">
+            <div class="game-card-genre">Survival Horror</div>
+            <h3 class="game-card-title">Whispers in the Fog</h3>
+            <p class="game-card-desc">Psychological horror in a fog-shrouded forest. No map. No guidance. Survive alone.</p>
+            <div class="game-card-footer">
+              <div class="game-card-rating">★★★★★ <span style="color:var(--text-secondary);">4.9</span></div>
+              <div class="game-card-players">320K playing</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="game-card fade-in-up stagger-5" onclick="openModal('terrinoth')">
+          <div class="game-card-img-wrapper">
+            <img class="game-card-img" src="https://sspark.genspark.ai/cfimages?u1=cZTYIiqlq8OJResukxIk5t7yxgX9k%2FTbk9uCG4b%2BOUuS9noA7enlHf068zKpsdN9if%2Bu103UJx4MGVYfdtddXBt6DnDi7RfWMPemoNXTWV5iZJXjW%2BdrzBQrxdkOHYsSKzMuLJg4QPCmUJrrzxNcVRxYBig%3D&u2=bLHlMqA75XdZlnSL&width=2560" alt="Terrinoth Heroes" />
+            <span class="game-card-badge" style="background:var(--gradient-blue);">Exclusive</span>
+          </div>
+          <div class="game-card-body">
+            <div class="game-card-genre">Tactical RPG</div>
+            <h3 class="game-card-title">Terrinoth: Heroes of Descent</h3>
+            <p class="game-card-desc">High fantasy tactical RPG with deep turn-based combat, 50+ heroes, and an epic campaign.</p>
+            <div class="game-card-footer">
+              <div class="game-card-rating">★★★★½ <span style="color:var(--text-secondary);">4.6</span></div>
+              <div class="game-card-players">67K playing</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="game-card fade-in-up stagger-6" onclick="openModal('wilderdark')">
+          <div class="game-card-img-wrapper">
+            <img class="game-card-img" src="https://sspark.genspark.ai/cfimages?u1=h34MnFFq1%2FhUNIYGiKUFnz4El14kNzKHoWFYgl%2BDL2PIaoyK5aEyrmi438L5wEJBzKOrWVO8mu7ZxWJsZLAoLp0Rv2ZbQBpwSQA6M7oJj4ldHi1LXnjhCrMSoV1aBHTaWLs4%2BOkJjO0dJBMJpJJYfBuLqX1WRqlWg%3D%3D&u2=u32svjbGBfONWJT%2F&width=2560" alt="Wilderdark" />
+            <span class="game-card-badge">🌑 Dark</span>
+          </div>
+          <div class="game-card-body">
+            <div class="game-card-genre">Survival Horror</div>
+            <h3 class="game-card-title">Wilderdark</h3>
+            <p class="game-card-desc">Escape a supernatural wilderness teeming with ancient horrors. First-person survival nightmare.</p>
+            <div class="game-card-footer">
+              <div class="game-card-rating">★★★★ <span style="color:var(--text-secondary);">4.4</span></div>
+              <div class="game-card-players">45K playing</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 7 -->
+        <div class="game-card fade-in-up stagger-1" onclick="openModal('neonvice')">
+          <div class="game-card-img-wrapper">
+            <img class="game-card-img" src="https://sspark.genspark.ai/cfimages?u1=FpfgCchnCmPGyag8YPcDh%2B6PV6x1sHYpM6LlzXfjwcYrZXQNacCEVeIiSIBG68VhpiNHhYOD9Ta8v6ecyDeYXc%2BrBslGtDHlTP%2BAwQivzwropAkNCTH1rYPMU718j%2FG8TJey0B4MjNTDaxvjJbkPR8RWqCuJ&u2=edFHEFrccYkXMKRP&width=2560" alt="Neon Vice" />
+            <span class="game-card-badge" style="background:linear-gradient(135deg,#ff00ff,#8b00ff);">Cinematic</span>
+          </div>
+          <div class="game-card-body">
+            <div class="game-card-genre">Open World / Action</div>
+            <h3 class="game-card-title">Neon Vice City</h3>
+            <p class="game-card-desc">Open-world crime thriller in a hyper-realistic neon metropolis. 100+ hours of story-driven gameplay.</p>
+            <div class="game-card-footer">
+              <div class="game-card-rating">★★★★★ <span style="color:var(--text-secondary);">4.8</span></div>
+              <div class="game-card-players">512K playing</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 8 -->
+        <div class="game-card fade-in-up stagger-2" onclick="openModal('rpg2')">
+          <div class="game-card-img-wrapper">
+            <img class="game-card-img" src="https://sspark.genspark.ai/cfimages?u1=wek%2Fgqfds%2FDKpoOI0Q2HvPG%2FGAmzWIZ1v8BhgTm7QrynTtoUen1Yiz%2FK6poR%2BAvXXI9yNPE2O2lGI0PymR1JIJ0of6Hd&u2=Qy4UBd4OCTzn5SOX&width=2560" alt="Fantasy RPG" />
+            <span class="game-card-badge">⚔️ Epic</span>
+          </div>
+          <div class="game-card-body">
+            <div class="game-card-genre">MMORPG</div>
+            <h3 class="game-card-title">Worlds of Aetheria Online</h3>
+            <p class="game-card-desc">A massively multiplayer online fantasy world with thousands of quests, guilds, and dungeons.</p>
+            <div class="game-card-footer">
+              <div class="game-card-rating">★★★★½ <span style="color:var(--text-secondary);">4.5</span></div>
+              <div class="game-card-players">890K playing</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TOP PLAYED QUICK LIST -->
+    <div class="genre-section">
+      <div class="genre-section-header">
+        <span style="font-size:1.2rem;">⚡</span>
+        <h3>Most Played Right Now</h3>
+        <a href="#">View all →</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0.75rem;">
+        <a href="#" class="game-card-h">
+          <img class="game-card-h-img" src="https://sspark.genspark.ai/cfimages?u1=f%2FSyQrIsxZ6mrt4Zy7e%2Fmo75ahN3HsP0hj5K7xY1mymk0r2403S%2BrAh8%2FhgSy7%2FgxgovEBWCWE1i0%2BLU6QKfcNbyQglUKT7RTO9HLuZXfrhD%2F4Xf2%2FGQiedSsETxpYEaPRdHE7jfFtExZ7CjHRkg5hDPQDdBGZTT%2BA%3D%3D&u2=QONzvaUnvVbvz9%2FB&width=2560" alt="NeonStrike" />
+          <div class="game-card-h-body">
+            <div class="genre">FPS Shooter</div>
+            <h4>NeonStrike: Reborn</h4>
+            <div class="rating">★★★★½ 245K players</div>
+          </div>
+          <div class="game-card-h-play"><i class="fa-solid fa-play"></i></div>
+        </a>
+        <a href="#" class="game-card-h">
+          <img class="game-card-h-img" src="https://sspark.genspark.ai/cfimages?u1=wek%2Fgqfds%2FDKpoOI0Q2HvPG%2FGAmzWIZ1v8BhgTm7QrynTtoUen1Yiz%2FK6poR%2BAvXXI9yNPE2O2lGI0PymR1JIJ0of6Hd&u2=Qy4UBd4OCTzn5SOX&width=2560" alt="Aetheria" />
+          <div class="game-card-h-body">
+            <div class="genre">MMORPG</div>
+            <h4>Worlds of Aetheria Online</h4>
+            <div class="rating">★★★★½ 890K players</div>
+          </div>
+          <div class="game-card-h-play"><i class="fa-solid fa-play"></i></div>
+        </a>
+        <a href="#" class="game-card-h">
+          <img class="game-card-h-img" src="https://sspark.genspark.ai/cfimages?u1=FpfgCchnCmPGyag8YPcDh%2B6PV6x1sHYpM6LlzXfjwcYrZXQNacCEVeIiSIBG68VhpiNHhYOD9Ta8v6ecyDeYXc%2BrBslGtDHlTP%2BAwQivzwropAkNCTH1rYPMU718j%2FG8TJey0B4MjNTDaxvjJbkPR8RWqCuJ&u2=edFHEFrccYkXMKRP&width=2560" alt="Neon Vice" />
+          <div class="game-card-h-body">
+            <div class="genre">Open World</div>
+            <h4>Neon Vice City</h4>
+            <div class="rating">★★★★★ 512K players</div>
+          </div>
+          <div class="game-card-h-play"><i class="fa-solid fa-play"></i></div>
+        </a>
+        <a href="#" class="game-card-h">
+          <img class="game-card-h-img" src="https://sspark.genspark.ai/cfimages?u1=mNLSymwOTe9TUVRAy1TJfkMKXl90nssJ8B34bTWTv7BO7D5oMs4ZRpQ%2FzIdJpf29aZFj8ndD0rU9XxKRZZ2nWGFMD58fFapkh44D9FB85FY5cYZJcQKxHOOeXjK4%2BydAYb%2Bbdp1DgUUc6wZYt9PrBAbixqPldQT1Can%2BsytuI1Vy6XwbhiyysT3xUrtVf%2BmShOt97nfOIGhkYmygktt99BaoyBdUCeE%3D&u2=6RtaEW6URcIrDGGp&width=2560" alt="Hyperion" />
+          <div class="game-card-h-body">
+            <div class="genre">Racing</div>
+            <h4>Hyperion City Racer</h4>
+            <div class="rating">★★★★★ 89K players</div>
+          </div>
+          <div class="game-card-h-play"><i class="fa-solid fa-play"></i></div>
+        </a>
+        <a href="#" class="game-card-h">
+          <img class="game-card-h-img" src="https://sspark.genspark.ai/cfimages?u1=3IfjZJyUgZkQaIGPH0XwWCNzZV%2BKRkwlLye4ySKgHU4N54oBYn92f34oxzXrxzc2ufCp2P0Wp8blgPb7jYVrcWx1h2a76VHZ5GjTDfKK0tMp2U35dLDaWX%2FipwvLk54FHMLGHU0C9k5qvKaiYXheb1ny1J4%3D&u2=vnNrSvAlOnbS4LVd&width=2560" alt="Shadow Realm" />
+          <div class="game-card-h-body">
+            <div class="genre">Action RPG</div>
+            <h4>Shadow Realm Chronicles</h4>
+            <div class="rating">★★★★★ 128K players</div>
+          </div>
+          <div class="game-card-h-play"><i class="fa-solid fa-play"></i></div>
+        </a>
+        <a href="#" class="game-card-h">
+          <img class="game-card-h-img" src="https://sspark.genspark.ai/cfimages?u1=1idwCsByRr256PNw%2FundCTNZ6oDH%2BSAtPDDqWiA2juVtWo45x%2FbTaEMVjMqn2bXjqrObZ9C%2BQcb1KwF6GMl%2BoFMa%2FbEywC7VcYo5JhVwU3OrDrOwHDgdej08YtAAE5Xv2EyTIl4G4rgykjU%3D&u2=GmhcqiKu5%2FdF1UUD&width=2560" alt="Fog" />
+          <div class="game-card-h-body">
+            <div class="genre">Horror</div>
+            <h4>Whispers in the Fog</h4>
+            <div class="rating">★★★★★ 320K players</div>
+          </div>
+          <div class="game-card-h-play"><i class="fa-solid fa-play"></i></div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- CTA STRIP -->
+<section class="cta-section" style="padding:4rem 2rem;">
+  <div class="container">
+    <h2 class="fade-in-up">All 500+ Games <span class="gradient-text">Included</span></h2>
+    <p class="fade-in-up stagger-1">Subscribe today and get instant access to our full library. New games added every week.</p>
+    <a href="pricing.html" class="btn-primary fade-in-up stagger-2"><i class="fa-solid fa-rocket"></i> See Pricing Plans</a>
+  </div>
+</section>
+
+<!-- GAME MODAL -->
+<div class="game-modal" id="gameModal">
+  <div class="game-modal-backdrop" onclick="closeModal()"></div>
+  <div class="game-modal-box">
+    <div class="game-modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></div>
+    <img class="game-modal-img" id="modalImg" src="" alt="" />
+    <div class="game-modal-body">
+      <div id="modalGenre" class="game-card-genre"></div>
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc"></p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+        <span style="font-size:0.85rem;color:var(--text-secondary);"><i class="fa-solid fa-star" style="color:#ffd700;"></i> <span id="modalRating"></span></span>
+        <span style="font-size:0.85rem;color:var(--text-secondary);"><i class="fa-solid fa-users" style="color:var(--primary);"></i> <span id="modalPlayers"></span></span>
+        <span style="font-size:0.85rem;color:var(--text-secondary);"><i class="fa-solid fa-clock" style="color:var(--accent);"></i> <span id="modalHours"></span></span>
+      </div>
+      <a href="pricing.html" class="btn-primary" style="width:100%;justify-content:center;display:flex;">
+        <i class="fa-solid fa-play"></i> Play Now — Subscribe to Access
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo" style="display:inline-flex;">
+        <div class="nav-logo-icon">⚡</div>
+        <div class="nav-logo-text">AWS <span>Gaming</span></div>
+      </a>
+      <p>The world's most powerful cloud gaming platform. 500+ games, zero downloads, infinite possibilities.</p>
+      <div class="footer-social">
+        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-twitch"></i></a>
+        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Games</h4>
+      <ul>
+        <li><a href="#">Action RPG</a></li>
+        <li><a href="#">FPS Shooters</a></li>
+        <li><a href="#">Racing</a></li>
+        <li><a href="#">Horror</a></li>
+        <li><a href="#">MOBA</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="#">Tournaments</a></li>
+        <li><a href="#">Leaderboards</a></li>
+        <li><a href="#">Game Pass</a></li>
+        <li><a href="contact.html">Support</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Cookie Policy</a></li>
+        <li><a href="#">EULA</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 AWS Gaming, Inc. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  const games = {
+    shadow: {
+      img: 'https://sspark.genspark.ai/cfimages?u1=3IfjZJyUgZkQaIGPH0XwWCNzZV%2BKRkwlLye4ySKgHU4N54oBYn92f34oxzXrxzc2ufCp2P0Wp8blgPb7jYVrcWx1h2a76VHZ5GjTDfKK0tMp2U35dLDaWX%2FipwvLk54FHMLGHU0C9k5qvKaiYXheb1ny1J4%3D&u2=vnNrSvAlOnbS4LVd&width=2560',
+      genre: 'Action RPG', title: 'Shadow Realm Chronicles',
+      desc: 'An epic open-world RPG with stunning visuals, deep lore, and thousands of hours of hand-crafted content. Build your character, forge alliances, and uncover the secrets of the Shadow Realm.',
+      rating: '4.9 / 5.0', players: '128,000 active players', hours: '80+ hours average playtime'
+    },
+    neon: {
+      img: 'https://sspark.genspark.ai/cfimages?u1=f%2FSyQrIsxZ6mrt4Zy7e%2Fmo75ahN3HsP0hj5K7xY1mymk0r2403S%2BrAh8%2FhgSy7%2FgxgovEBWCWE1i0%2BLU6QKfcNbyQglUKT7RTO9HLuZXfrhD%2F4Xf2%2FGQiedSsETxpYEaPRdHE7jfFtExZ7CjHRkg5hDPQDdBGZTT%2BA%3D%3D&u2=QONzvaUnvVbvz9%2FB&width=2560',
+      genre: 'FPS Shooter', title: 'NeonStrike: Reborn',
+      desc: 'Intense tactical FPS with character abilities, 5v5 ranked matches, weekly battle passes, and seasonal events. Join millions of players competing at the highest level.',
+      rating: '4.7 / 5.0', players: '245,000 active players', hours: 'Infinite replayability'
+    },
+    hyperion: {
+      img: 'https://sspark.genspark.ai/cfimages?u1=mNLSymwOTe9TUVRAy1TJfkMKXl90nssJ8B34bTWTv7BO7D5oMs4ZRpQ%2FzIdJpf29aZFj8ndD0rU9XxKRZZ2nWGFMD58fFapkh44D9FB85FY5cYZJcQKxHOOeXjK4%2BydAYb%2Bbdp1DgUUc6wZYt9PrBAbixqPldQT1Can%2BsytuI1Vy6XwbhiyysT3xUrtVf%2BmShOt97nfOIGhkYmygktt99BaoyBdUCeE%3D&u2=6RtaEW6URcIrDGGp&width=2560',
+      genre: 'Open World Racing', title: 'Hyperion City Racer',
+      desc: 'Race through a sprawling neon-soaked cyberpunk metropolis with over 200 licensed cars. Compete in live multiplayer events, build your garage, and dominate the streets.',
+      rating: '4.8 / 5.0', players: '89,000 active players', hours: '60+ hours story + multiplayer'
+    },
+    fog: {
+      img: 'https://sspark.genspark.ai/cfimages?u1=1idwCsByRr256PNw%2FundCTNZ6oDH%2BSAtPDDqWiA2juVtWo45x%2FbTaEMVjMqn2bXjqrObZ9C%2BQcb1KwF6GMl%2BoFMa%2FbEywC7VcYo5JhVwU3OrDrOwHDgdej08YtAAE5Xv2EyTIl4G4rgykjU%3D&u2=GmhcqiKu5%2FdF1UUD&width=2560',
+      genre: 'Survival Horror', title: 'Whispers in the Fog',
+      desc: 'A breathtaking first-person psychological horror game set in a fog-drenched forest. With no map and no guide, every step could be your last. Game of the Year 2024.',
+      rating: '4.9 / 5.0', players: '320,000 active players', hours: '40+ hours story'
+    },
+    terrinoth: {
+      img: 'https://sspark.genspark.ai/cfimages?u1=cZTYIiqlq8OJResukxIk5t7yxgX9k%2FTbk9uCG4b%2BOUuS9noA7enlHf068zKpsdN9if%2Bu103UJx4MGVYfdtddXBt6DnDi7RfWMPemoNXTWV5iZJXjW%2BdrzBQrxdkOHYsSKzMuLJg4QPCmUJrrzxNcVRxYBig%3D&u2=bLHlMqA75XdZlnSL&width=2560',
+      genre: 'Tactical RPG', title: 'Terrinoth: Heroes of Descent',
+      desc: 'A high fantasy tactical RPG with turn-based combat, over 50 unique heroes, and an epic campaign spanning multiple continents. Exclusive to AWS Gaming platform.',
+      rating: '4.6 / 5.0', players: '67,000 active players', hours: '100+ hours'
+    },
+    wilderdark: {
+      img: 'https://sspark.genspark.ai/cfimages?u1=h34MnFFq1%2FhUNIYGiKUFnz4El14kNzKHoWFYgl%2BDL2PIaoyK5aEyrmi438L5wEJBzKOrWVO8mu7ZxWJsZLAoLp0Rv2ZbQBpwSQA6M7oJj4ldHi1LXnjhCrMSoV1aBHTaWLs4%2BOkJjO0dJBMJpJJYfBuLqX1WRqlWg%3D%3D&u2=u32svjbGBfONWJT%2F&width=2560',
+      genre: 'Survival Horror', title: 'Wilderdark',
+      desc: 'Escape a supernatural wilderness teeming with ancient horrors. Crafted by Junkfish studio, Wilderdark delivers relentless tension in a stunning first-person nightmare.',
+      rating: '4.4 / 5.0', players: '45,000 active players', hours: '25+ hours'
+    },
+    neonvice: {
+      img: 'https://sspark.genspark.ai/cfimages?u1=FpfgCchnCmPGyag8YPcDh%2B6PV6x1sHYpM6LlzXfjwcYrZXQNacCEVeIiSIBG68VhpiNHhYOD9Ta8v6ecyDeYXc%2BrBslGtDHlTP%2BAwQivzwropAkNCTH1rYPMU718j%2FG8TJey0B4MjNTDaxvjJbkPR8RWqCuJ&u2=edFHEFrccYkXMKRP&width=2560',
+      genre: 'Open World / Action', title: 'Neon Vice City',
+      desc: 'Open-world crime thriller in a hyper-realistic neon metropolis. Live the life of an underworld kingpin across 100+ hours of story-driven content, heists, and gang wars.',
+      rating: '4.8 / 5.0', players: '512,000 active players', hours: '100+ hours'
+    },
+    rpg2: {
+      img: 'https://sspark.genspark.ai/cfimages?u1=wek%2Fgqfds%2FDKpoOI0Q2HvPG%2FGAmzWIZ1v8BhgTm7QrynTtoUen1Yiz%2FK6poR%2BAvXXI9yNPE2O2lGI0PymR1JIJ0of6Hd&u2=Qy4UBd4OCTzn5SOX&width=2560',
+      genre: 'MMORPG', title: 'Worlds of Aetheria Online',
+      desc: 'A living, breathing massively-multiplayer online fantasy world with thousands of quests, player guilds, epic dungeons, and dynamic world events updated monthly.',
+      rating: '4.5 / 5.0', players: '890,000 active players', hours: 'Endless gameplay'
+    }
+  };
+
+  function openModal(id) {
+    const g = games[id];
+    if (!g) return;
+    document.getElementById('modalImg').src = g.img;
+    document.getElementById('modalImg').alt = g.title;
+    document.getElementById('modalGenre').textContent = g.genre;
+    document.getElementById('modalTitle').textContent = g.title;
+    document.getElementById('modalDesc').textContent = g.desc;
+    document.getElementById('modalRating').textContent = g.rating;
+    document.getElementById('modalPlayers').textContent = g.players;
+    document.getElementById('modalHours').textContent = g.hours;
+    document.getElementById('gameModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('gameModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Genre tabs
+  document.querySelectorAll('.genre-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.genre-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

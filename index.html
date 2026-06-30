@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS Gaming — Cloud-Powered Gaming Platform</title>
+  <meta name="description" content="Experience next-gen cloud gaming powered by AWS infrastructure. Ultra-low latency, 4K streaming, and a massive library of games." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+  <style>
+    /* ---- Page-specific styles ---- */
+    .hero-container { padding: 100px 0 60px; }
+
+    /* Trust bar */
+    .trust-bar {
+      padding: 1.5rem 2rem;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid var(--border);
+    }
+    .trust-bar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .trust-bar-label {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-family: 'Rajdhani', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .trust-items {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+    }
+    .trust-item i { color: var(--primary); font-size: 0.9rem; }
+
+    /* HOW IT WORKS */
+    .how-it-works { background: var(--bg-dark); }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      position: relative;
+    }
+    .step-card {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      position: relative;
+    }
+    .step-number {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--gradient-orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin: 0 auto 1.5rem;
+      box-shadow: var(--glow-primary);
+    }
+    .step-card h3 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .step-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* PLATFORMS */
+    .platforms-section {
+      background: var(--bg-card);
+      padding: 4rem 2rem;
+    }
+    .platforms-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .platforms-inner h3 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 2rem;
+    }
+    .platforms-list {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .platform-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-secondary);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 12px 20px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+    .platform-item:hover {
+      border-color: rgba(255,107,0,0.4);
+      color: var(--text-primary);
+      background: rgba(255,107,0,0.05);
+    }
+    .platform-item i { font-size: 1.4rem; color: var(--primary); }
+
+    /* ANNOUNCEMENT BANNER */
+    .announce-banner {
+      background: var(--gradient-orange);
+      padding: 0.75rem 2rem;
+      text-align: center;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+    }
+    .announce-banner a {
+      color: white;
+      text-decoration: underline;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BANNER -->
+<div class="announce-banner">
+  🎮 &nbsp; NEW: AWS Gaming Ultra Plan — 8K Streaming & Dedicated GPU now available!
+  <a href="pricing.html">See Plans →</a>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">⚡</div>
+    <div class="nav-logo-text">AWS <span>Gaming</span></div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="games.html">Games</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="pricing.html" class="nav-cta">Get Started</a></li>
+  </ul>
+  <div class="nav-hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-bg-img"></div>
+  <div class="hero-particles" id="particles"></div>
+  <div class="hero-glow-left"></div>
+  <div class="hero-glow-right"></div>
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        Powered by AWS Cloud Infrastructure
+      </div>
+      <h1 class="hero-title">
+        Game Without<br>
+        <span class="gradient-text">Limits.</span><br>
+        Cloud. Fast. Epic.
+      </h1>
+      <p class="hero-desc">
+        Stream AAA titles instantly with zero lag. Our AWS-powered network delivers 4K gaming at 120fps directly to your screen — no downloads, no hardware upgrades needed.
+      </p>
+      <div class="hero-btns">
+        <a href="pricing.html" class="btn-primary">
+          <i class="fa-solid fa-bolt"></i> Start Free Trial
+        </a>
+        <a href="games.html" class="btn-secondary">
+          <i class="fa-solid fa-gamepad"></i> Browse Games
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-number">500+</div>
+          <div class="hero-stat-label">AAA Games</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">12ms</div>
+          <div class="hero-stat-label">Avg. Latency</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">2M+</div>
+          <div class="hero-stat-label">Active Players</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img-wrapper">
+        <img src="https://sspark.genspark.ai/cfimages?u1=tc6tYUM330oBw0N%2FYExdUtIucfypyx6FE00Y%2BkREPcph%2FYUA5mb6sCly1tAV3x5PRrfoKH9sWsJ1a78dMoVBfH%2Bs1VaNeCRw2LdoYtxM7c0bS0O9eSSTOmErco0NKCutNaNn3K9Q6CoomrF%2FsbNeHlzIkWb%2BM5B7QxtUu7WTFw6gYfxNSDlEB0cA2X%2BE9Fc6eZNBwri2HGdtMkIzCJ%2FK38ahLqmiqp60RXZ%2BC%2BoRxYPtivwWQqQe3gIXe1ZZFifoPmj6f73a6poAWZl1td5rBbY6UVRN%2FytMHdB3C%2FzE8GP1021JnJhGhIC0u%2FHGUhIyKlAeMggeF%2FhDXh6fWviT7MY8e%2BLl8lp4tCpjGzelhilqVzvl%2FT0%3D&u2=OtlyQvq8%2FJG4k5Nb&width=2560" alt="AWS Gaming Cloud Server" />
+        <div class="hero-img-overlay"></div>
+      </div>
+      <div class="hero-floating-card card-1">
+        <div class="hero-floating-card-icon">🚀</div>
+        <div class="hero-floating-card-text">
+          <strong>Ultra Fast</strong>
+          <span>12ms latency</span>
+        </div>
+      </div>
+      <div class="hero-floating-card card-2">
+        <div class="hero-floating-card-icon">🎮</div>
+        <div class="hero-floating-card-text">
+          <strong>500+ Games</strong>
+          <span>New titles weekly</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <span class="trust-bar-label">Trusted by gamers worldwide</span>
+    <div class="trust-items">
+      <div class="trust-item"><i class="fa-solid fa-shield-halved"></i> Enterprise Security</div>
+      <div class="trust-item"><i class="fa-solid fa-globe"></i> 30+ Global Regions</div>
+      <div class="trust-item"><i class="fa-solid fa-clock"></i> 99.99% Uptime SLA</div>
+      <div class="trust-item"><i class="fa-solid fa-headset"></i> 24/7 Support</div>
+      <div class="trust-item"><i class="fa-solid fa-award"></i> Best Cloud Gaming 2024</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="container">
+    <span class="tag" style="display:block;text-align:center;width:fit-content;margin:0 auto 1rem;">Why AWS Gaming</span>
+    <h2 class="section-title fade-in-up">Built for <span class="gradient-text">Next-Gen</span> Gaming</h2>
+    <p class="section-subtitle fade-in-up stagger-1">Everything you need for the ultimate cloud gaming experience, powered by the world's most reliable cloud infrastructure.</p>
+    <div class="features-grid">
+      <div class="feature-card fade-in-up stagger-1">
+        <div class="feature-icon orange"><i class="fa-solid fa-bolt"></i></div>
+        <h3>Ultra-Low Latency</h3>
+        <p>Our global network of AWS edge nodes delivers as low as 8ms latency. Experience buttery-smooth gaming with zero input delay across 30+ worldwide regions.</p>
+      </div>
+      <div class="feature-card fade-in-up stagger-2">
+        <div class="feature-icon blue"><i class="fa-solid fa-display"></i></div>
+        <h3>4K @ 120fps Streaming</h3>
+        <p>Stream your favorite games in stunning 4K HDR resolution at 120 frames per second. Ray tracing and DLSS support included on all premium plans.</p>
+      </div>
+      <div class="feature-card fade-in-up stagger-3">
+        <div class="feature-icon purple"><i class="fa-solid fa-gamepad"></i></div>
+        <h3>Instant Play</h3>
+        <p>No downloads. No installs. Click and play any of 500+ AAA titles instantly from any device — PC, Mac, TV, tablet, or smartphone.</p>
+      </div>
+      <div class="feature-card fade-in-up stagger-4">
+        <div class="feature-icon green"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3>Enterprise Security</h3>
+        <p>Bank-grade encryption protects your account and game data. AWS-backed DDoS protection keeps your sessions safe from attacks 24/7.</p>
+      </div>
+      <div class="feature-card fade-in-up stagger-5">
+        <div class="feature-icon orange"><i class="fa-solid fa-server"></i></div>
+        <h3>Dedicated GPU Servers</h3>
+        <p>Access NVIDIA RTX 4090-class dedicated GPU instances with up to 80GB VRAM. No shared resources — your game, your power, all the time.</p>
+      </div>
+      <div class="feature-card fade-in-up stagger-6">
+        <div class="feature-icon blue"><i class="fa-solid fa-users"></i></div>
+        <h3>Multiplayer & Social</h3>
+        <p>Built-in party system, voice chat, and friend matchmaking. Cross-play across all platforms with integrated leaderboards and tournaments.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item fade-in-up">
+        <div class="stat-number gradient-text" data-target="500">0</div>
+        <div class="stat-label">AAA Games Available</div>
+      </div>
+      <div class="stat-item fade-in-up stagger-1">
+        <div class="stat-number gradient-text-blue" data-target="2000000">0</div>
+        <div class="stat-label">Active Players</div>
+      </div>
+      <div class="stat-item fade-in-up stagger-2">
+        <div class="stat-number" style="color:#8b5cf6;" data-target="30">0</div>
+        <div class="stat-label">Global AWS Regions</div>
+      </div>
+      <div class="stat-item fade-in-up stagger-3">
+        <div class="stat-number" style="color:#00ff88;" data-target="99">0</div>
+        <div class="stat-label">% Uptime Guarantee</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GAME SHOWCASE -->
+<section class="game-showcase" id="games">
+  <div class="container">
+    <span class="tag" style="display:block;text-align:center;width:fit-content;margin:0 auto 1rem;">Featured Games</span>
+    <h2 class="section-title fade-in-up">Top <span class="gradient-text">Titles</span> This Month</h2>
+    <p class="section-subtitle fade-in-up stagger-1">Hand-picked AAA experiences, optimized for cloud streaming.</p>
+    <div class="games-grid">
+      <a href="games.html" class="game-card fade-in-up stagger-1">
+        <div class="game-card-img-wrapper">
+          <img class="game-card-img" src="https://sspark.genspark.ai/cfimages?u1=3IfjZJyUgZkQaIGPH0XwWCNzZV%2BKRkwlLye4ySKgHU4N54oBYn92f34oxzXrxzc2ufCp2P0Wp8blgPb7jYVrcWx1h2a76VHZ5GjTDfKK0tMp2U35dLDaWX%2FipwvLk54FHMLGHU0C9k5qvKaiYXheb1ny1J4%3D&u2=vnNrSvAlOnbS4LVd&width=2560" alt="Epic Fantasy RPG" />
+          <span class="game-card-badge">🔥 Hot</span>
+        </div>
+        <div class="game-card-body">
+          <div class="game-card-genre">Action RPG</div>
+          <h3 class="game-card-title">Shadow Realm Chronicles</h3>
+          <p class="game-card-desc">An epic open-world RPG with stunning visuals, deep lore, and thousands of hours of content.</p>
+          <div class="game-card-footer">
+            <div class="game-card-rating">★★★★★ <span style="color:var(--text-secondary);">4.9</span></div>
+            <div class="game-card-players">128K playing now</div>
+          </div>
+        </div>
+      </a>
+      <a href="games.html" class="game-card fade-in-up stagger-2">
+        <div class="game-card-img-wrapper">
+          <img class="game-card-img" src="https://sspark.genspark.ai/cfimages?u1=f%2FSyQrIsxZ6mrt4Zy7e%2Fmo75ahN3HsP0hj5K7xY1mymk0r2403S%2BrAh8%2FhgSy7%2FgxgovEBWCWE1i0%2BLU6QKfcNbyQglUKT7RTO9HLuZXfrhD%2F4Xf2%2FGQiedSsETxpYEaPRdHE7jfFtExZ7CjHRkg5hDPQDdBGZTT%2BA%3D%3D&u2=QONzvaUnvVbvz9%2FB&width=2560" alt="FPS Game" />
+          <span class="game-card-badge" style="background:var(--gradient-blue);">New</span>
+        </div>
+        <div class="game-card-body">
+          <div class="game-card-genre">FPS Shooter</div>
+          <h3 class="game-card-title">NeonStrike: Reborn</h3>
+          <p class="game-card-desc">Intense tactical FPS with character abilities, ranked matches, and weekly battle passes.</p>
+          <div class="game-card-footer">
+            <div class="game-card-rating">★★★★½ <span style="color:var(--text-secondary);">4.7</span></div>
+            <div class="game-card-players">245K playing now</div>
+          </div>
+        </div>
+      </a>
+      <a href="games.html" class="game-card fade-in-up stagger-3">
+        <div class="game-card-img-wrapper">
+          <img class="game-card-img" src="https://sspark.genspark.ai/cfimages?u1=mNLSymwOTe9TUVRAy1TJfkMKXl90nssJ8B34bTWTv7BO7D5oMs4ZRpQ%2FzIdJpf29aZFj8ndD0rU9XxKRZZ2nWGFMD58fFapkh44D9FB85FY5cYZJcQKxHOOeXjK4%2BydAYb%2Bbdp1DgUUc6wZYt9PrBAbixqPldQT1Can%2BsytuI1Vy6XwbhiyysT3xUrtVf%2BmShOt97nfOIGhkYmygktt99BaoyBdUCeE%3D&u2=6RtaEW6URcIrDGGp&width=2560" alt="Racing Game" />
+          <span class="game-card-badge" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);">Popular</span>
+        </div>
+        <div class="game-card-body">
+          <div class="game-card-genre">Open World Racing</div>
+          <h3 class="game-card-title">Hyperion City Racer</h3>
+          <p class="game-card-desc">Race through a neon-soaked cyberpunk metropolis with 200+ cars and live multiplayer events.</p>
+          <div class="game-card-footer">
+            <div class="game-card-rating">★★★★★ <span style="color:var(--text-secondary);">4.8</span></div>
+            <div class="game-card-players">89K playing now</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div style="text-align:center;margin-top:3rem;">
+      <a href="games.html" class="btn-primary"><i class="fa-solid fa-grid-2"></i> View All 500+ Games</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works">
+  <div class="container">
+    <span class="tag" style="display:block;text-align:center;width:fit-content;margin:0 auto 1rem;">Simple Setup</span>
+    <h2 class="section-title fade-in-up">Start Playing in <span class="gradient-text">3 Steps</span></h2>
+    <p class="section-subtitle fade-in-up stagger-1">Zero setup required. Be gaming in under 2 minutes.</p>
+    <div class="steps-grid">
+      <div class="step-card fade-in-up stagger-1">
+        <div class="step-number">1</div>
+        <h3>Choose Your Plan</h3>
+        <p>Pick a subscription that fits your gaming style. From casual to hardcore, we have the perfect plan for you.</p>
+      </div>
+      <div class="step-card fade-in-up stagger-2">
+        <div class="step-number">2</div>
+        <h3>Create Account</h3>
+        <p>Sign up in seconds. Connect your existing game libraries from Steam, Epic, and Xbox Game Pass.</p>
+      </div>
+      <div class="step-card fade-in-up stagger-3">
+        <div class="step-number">3</div>
+        <h3>Play Anywhere</h3>
+        <p>Launch any game from any device. Your saves, settings, and progress follow you everywhere.</p>
+      </div>
+      <div class="step-card fade-in-up stagger-4">
+        <div class="step-number">4</div>
+        <h3>Level Up Together</h3>
+        <p>Join communities, compete in tournaments, and earn rewards as you progress through the AWS Gaming ecosystem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="container">
+    <span class="tag" style="display:block;text-align:center;width:fit-content;margin:0 auto 1rem;">Player Reviews</span>
+    <h2 class="section-title fade-in-up">What <span class="gradient-text">Gamers</span> Say</h2>
+    <p class="section-subtitle fade-in-up stagger-1">Real reviews from our community of 2M+ players.</p>
+    <div class="testimonials-grid">
+      <div class="testimonial-card fade-in-up stagger-1">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"I was skeptical about cloud gaming but AWS Gaming completely changed my mind. The latency is indistinguishable from local play. My old gaming PC is now just collecting dust!"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">AX</div>
+          <div class="testimonial-info">
+            <strong>Alex Thompson</strong>
+            <span>Pro Esports Player</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-in-up stagger-2">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Playing 4K at 120fps on my old laptop feels like magic. The game library is massive and they add new titles every week. Best investment I've made for gaming."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--gradient-blue);">MR</div>
+          <div class="testimonial-info">
+            <strong>Maria Rodriguez</strong>
+            <span>Casual Gamer, Mexico City</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-in-up stagger-3">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"As a streamer, the built-in overlay tools and low latency are perfect for my setup. AWS Gaming lets me play and stream simultaneously without any performance hit. Absolutely incredible."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--gradient-purple);">JK</div>
+          <div class="testimonial-info">
+            <strong>Jake Kim</strong>
+            <span>Twitch Streamer, 500K followers</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<div class="platforms-section">
+  <div class="platforms-inner">
+    <h3>Available on all your devices</h3>
+    <div class="platforms-list">
+      <div class="platform-item"><i class="fa-brands fa-windows"></i> Windows</div>
+      <div class="platform-item"><i class="fa-brands fa-apple"></i> macOS</div>
+      <div class="platform-item"><i class="fa-brands fa-android"></i> Android</div>
+      <div class="platform-item"><i class="fa-solid fa-mobile-screen"></i> iOS</div>
+      <div class="platform-item"><i class="fa-solid fa-tv"></i> Smart TV</div>
+      <div class="platform-item"><i class="fa-brands fa-chrome"></i> Browser</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="fade-in-up">Ready to <span class="gradient-text">Power Up?</span></h2>
+    <p class="fade-in-up stagger-1">Join millions of gamers already playing on AWS Gaming. Your first 7 days are completely free.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="fade-in-up stagger-2">
+      <a href="pricing.html" class="btn-primary"><i class="fa-solid fa-rocket"></i> Start Free Trial</a>
+      <a href="contact.html" class="btn-secondary"><i class="fa-solid fa-message"></i> Talk to Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo" style="display:inline-flex;">
+        <div class="nav-logo-icon">⚡</div>
+        <div class="nav-logo-text">AWS <span>Gaming</span></div>
+      </a>
+      <p>The world's most powerful cloud gaming platform, built on AWS infrastructure. Play any game, anywhere, on any device.</p>
+      <div class="footer-social">
+        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-twitch"></i></a>
+        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="games.html">Game Library</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="#">Tournaments</a></li>
+        <li><a href="#">Leaderboards</a></li>
+        <li><a href="#">Game Pass</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">System Status</a></li>
+        <li><a href="#">Community</a></li>
+        <li><a href="#">Developers</a></li>
+        <li><a href="#">Partnerships</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 AWS Gaming, Inc. All rights reserved. AWS is a trademark of Amazon Web Services.</p>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Cookie Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
