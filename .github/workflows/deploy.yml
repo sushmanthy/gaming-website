@@ -21,7 +21,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             rm -rf /tmp/gaming-website
-            git clone https://github.com/RahulGurram4/gaming-website.git /tmp/gaming-website
+            git clone https://github.com/sushmanthy/gaming-website.git /tmp/gaming-website
             sudo rm -rf /var/www/html/*
             sudo cp -r /tmp/gaming-website/* /var/www/html/
             sudo chown -R www-data:www-data /var/www/html
