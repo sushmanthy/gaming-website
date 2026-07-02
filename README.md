@@ -1,4 +1,4 @@
-# ⚡ AWS Gaming — Cloud Gaming Platform Website
+# ⚡ sushmanth AWS Gaming — Cloud Gaming Platform Website
 
 A fully modern, responsive, multi-page static website for a fictional **AWS-powered cloud gaming platform**. Built with HTML5, CSS3, and Vanilla JavaScript — no frameworks required.
 
